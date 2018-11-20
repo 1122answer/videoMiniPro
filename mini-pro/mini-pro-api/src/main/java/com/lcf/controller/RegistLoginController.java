@@ -1,5 +1,6 @@
 package com.lcf.controller;
 
+import com.lcf.pojo.vo.UsersVO;
 import com.lcf.service.UserSevice;
 import com.lcf.pojo.Users;
 import com.lcf.utils.MD5Utils;
@@ -7,12 +8,16 @@ import io.netty.util.internal.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.lcf.utils.IMoocJSONResult;
+
+import java.util.UUID;
+
 @RestController
 @Api(value = "用户注册登录接口" , tags = {"注册登录"})
-public class RegistLoginController {
+public class RegistLoginController extends BasicController{
 
 	@Autowired
 	private UserSevice userSevice;
@@ -36,7 +41,13 @@ public class RegistLoginController {
 			userSevice.saveUser(user);
 		}
 		//保存用户名
-		return  IMoocJSONResult.ok();
+		String uniquerToken = UUID.randomUUID().toString();
+		redis.set(USER_REDIS_SESSION + ":" + user.getId(), uniquerToken,1000*60*30);
+		UsersVO usersVO = new UsersVO();
+		//为什么是空对象，需要拷贝
+		BeanUtils.copyProperties(user,usersVO);
+		usersVO.setUserToken(uniquerToken);
+		return  IMoocJSONResult.ok(user);
 	}
 
 	@ApiOperation(value = "用户登录" , notes = "用户登录接口")
