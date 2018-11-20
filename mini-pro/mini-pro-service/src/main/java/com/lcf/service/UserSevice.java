@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface UserSevice {
     public boolean queryUsernameIsExist(String username);
     public void saveUser(Users user);
+    public Users queryUserForLogin(String userName, String password);
 }
