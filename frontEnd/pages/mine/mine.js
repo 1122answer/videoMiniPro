@@ -11,7 +11,7 @@ Page({
     var serverUrl = app.serverUrl;
     var user = app.userInfo;
     wx.request({
-      url: serverUrl + "/logout?userId=" + user.id,
+      url: serverUrl + "/logOut?userId=" + user.id,
       method: "POST",
       header: {
         "content-type": "application/json"
