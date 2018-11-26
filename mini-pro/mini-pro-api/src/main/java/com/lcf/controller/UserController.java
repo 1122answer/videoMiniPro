@@ -12,10 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -25,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @Api(value = "用户相关业务接口" , tags = {"业务祥光"})
+@RequestMapping("/user")
 public class UserController extends BasicController{
 
 	@Autowired
@@ -39,10 +37,11 @@ public class UserController extends BasicController{
 		String fileSpace ="C:/lcf-videos";
 		//保存到数据库中的相对路径
 		String uploadPathDB = "/"+userId+"/face";
+		FileOutputStream fileOutputStream = null;
+		InputStream inputStream = null;
 		try{
 			if(files !=null && files.length>0){
-				FileOutputStream fileOutputStream = null;
-				InputStream inputStream = null;
+
 				String fileName= files[0].getOriginalFilename();
 				if(StringUtils.isNotBlank(fileName)){
 					//文件上传最终保存路径
@@ -56,7 +55,9 @@ public class UserController extends BasicController{
 					inputStream = files[0].getInputStream();
 					IOUtils.copy(inputStream,fileOutputStream);
 				}
+
 			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally {
