@@ -52,5 +52,10 @@ public class UserSeviceImpl implements UserSevice {
 
         return result;
     }
-
+    public void updateUserInfo(Users user){
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id",user.getId());
+        userMapper.updateByExampleSelective(user,userExample);
+    }
 }

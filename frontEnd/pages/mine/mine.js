@@ -35,6 +35,7 @@ Page({
     })
   },
   changeFace:function(){
+    var me=this
     console.log(111)
     wx.chooseImage({
       count:1,
@@ -53,11 +54,15 @@ Page({
           name: 'file',
           success(res) {
             wx.hideLoading()
-            const data = res.data
+            const data = JSON.parse( res.data)
             console.log(data);
             wx.showToast({
               title: '上传成功—',
               icon:'success'
+            })
+            var imgUrl= data.data
+            me.setData({
+              faceUrl:serverUrl+imgUrl
             })
           },
           complete(res){
