@@ -52,5 +52,7 @@ public class UserSeviceImpl implements UserSevice {
 
         return result;
     }
+    public void updateUserInfo(Users user){
 
+    }
 }

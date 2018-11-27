@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @RestController
-@Api(value = "用户相关业务接口" , tags = {"业务祥光"})
+@Api(value = "用户相关业务接口" , tags = {"业务详情"})
 public class UserController extends BasicController{
 
 	@Autowired
@@ -39,10 +39,10 @@ public class UserController extends BasicController{
 		String fileSpace ="C:/lcf-videos";
 		//保存到数据库中的相对路径
 		String uploadPathDB = "/"+userId+"/face";
+		FileOutputStream fileOutputStream = null;
+		InputStream inputStream = null;
 		try{
 			if(files !=null && files.length>0){
-				FileOutputStream fileOutputStream = null;
-				InputStream inputStream = null;
 				String fileName= files[0].getOriginalFilename();
 				if(StringUtils.isNotBlank(fileName)){
 					//文件上传最终保存路径
