@@ -12,12 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -25,6 +23,7 @@ import java.util.UUID;
 
 @RestController
 @Api(value = "用户相关业务接口" , tags = {"业务详情"})
+@RequestMapping("/user")
 public class UserController extends BasicController{
 
 	@Autowired
@@ -35,6 +34,9 @@ public class UserController extends BasicController{
 	@PostMapping("/uploadFace")
 	public IMoocJSONResult uploadFace  (String userId,
 		@RequestParam("file") MultipartFile[] files) throws  Exception{
+		if(StringUtils.isBlank(userId)){
+			return IMoocJSONResult.errorMsg("用户ID不能为空");
+		}
 		//文件保存的命名空间
 		String fileSpace ="C:/lcf-videos";
 		//保存到数据库中的相对路径
@@ -47,7 +49,9 @@ public class UserController extends BasicController{
 				if(StringUtils.isNotBlank(fileName)){
 					//文件上传最终保存路径
 					String finalFacePath = fileSpace + uploadPathDB +"/"+ fileName;
+
 					//设置数据库保存路径
+					uploadPathDB+=("/"+fileName);
 					File outFile = new File(finalFacePath);
 					if(outFile.getParentFile() !=null || !outFile.getParentFile().isDirectory()){
 						outFile.getParentFile().mkdirs();
@@ -56,16 +60,24 @@ public class UserController extends BasicController{
 					inputStream = files[0].getInputStream();
 					IOUtils.copy(inputStream,fileOutputStream);
 				}
+
+			}else {
+				return IMoocJSONResult.errorMsg("上传出错...");
 			}
+
 		}catch (Exception e){
 			e.printStackTrace();
+			return IMoocJSONResult.errorMsg("上传出错...");
 		}finally {
 			if (fileOutputStream !=null){
 				fileOutputStream.flush();
 				fileOutputStream.close();
 			}
 		}
-
-			return IMoocJSONResult.ok();
+		Users user=new Users();
+		user.setId(userId);
+		user.setFaceImage(uploadPathDB);
+		userSevice.updateUserInfo(user);
+			return IMoocJSONResult.ok(uploadPathDB);
 	}
 }

@@ -10,7 +10,7 @@ public interface UserSevice {
     public Users queryUserForLogin(String userName, String password);
 /*
 * @Descripion:修改用户信息
-*更新用户信息
+*
 * */
     public void updateUserInfo(Users user);
 }

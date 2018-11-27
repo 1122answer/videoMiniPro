@@ -35,6 +35,7 @@ Page({
     })
   },
   changeFace:function(){
+    var me=this
     console.log(111)
     wx.chooseImage({
       count:1,
@@ -44,16 +45,24 @@ Page({
         var tempFilePaths=res.tempFilePaths;
         var serverUrl=app.serverUrl
         console.log(res,app.userInfo.id)
+        wx.showLoading({
+          title: '上传中',
+        })
         wx.uploadFile({
           url: serverUrl + '/user/uploadFace?userId=' + app.userInfo.id, //仅为示例，非真实的接口地址
           filePath: tempFilePaths[0],
           name: 'file',
           success(res) {
-            const data = res.data
+            wx.hideLoading()
+            const data = JSON.parse( res.data)
             console.log(data);
             wx.showToast({
               title: '上传成功—',
               icon:'success'
+            })
+            var imgUrl= data.data
+            me.setData({
+              faceUrl:serverUrl+imgUrl
             })
           },
           complete(res){

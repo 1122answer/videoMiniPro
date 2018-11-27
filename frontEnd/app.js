@@ -1,5 +1,5 @@
 //app.js
 App({
-  serverUrl:"http://localhost:8085",
+  serverUrl:"http://localhost:8082",
   userInfo:null
 })
