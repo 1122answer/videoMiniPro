@@ -13,4 +13,5 @@ public interface UserSevice {
 *
 * */
     public void updateUserInfo(Users user);
+    public Users queryUserInfo(String userId);
 }

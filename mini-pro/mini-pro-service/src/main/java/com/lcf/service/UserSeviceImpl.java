@@ -52,11 +52,22 @@ public class UserSeviceImpl implements UserSevice {
 
         return result;
     }
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
     public void updateUserInfo(Users user){
         Example userExample = new Example(Users.class);
         Example.Criteria criteria = userExample.createCriteria();
         criteria.andEqualTo("id",user.getId());
         userMapper.updateByExampleSelective(user,userExample);
 
+    }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserInfo(String userId) {
+        Example userExample = new Example(Users.class);
+        Example.Criteria criteria = userExample.createCriteria();
+        criteria.andEqualTo("id",userId);
+        Users user = userMapper.selectOneByExample(userExample);
+        return user;
     }
 }

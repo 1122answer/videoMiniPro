@@ -6,6 +6,45 @@ Page({
   data: {
     faceUrl: "../resource/images/noneface.png",
   },
+  onLoad(){
+    let self =this;
+    let user = app.userInfo;
+    let serverUrl = app.serverUrl;
+    wx.showLoading({
+      title: '请等待...',
+    });
+    // 调用后端
+    wx.request({
+      url: serverUrl + '/user/query?userId=' + user.id,
+      method: "POST",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data);
+        wx.hideLoading();
+        if (res.data.status == 200) {
+          debugger
+           let  userInfo = res.data.data;
+          let faceUrlData = userInfo.faceImage&&userInfo.faceImage || self.data.faceUrl
+          self.setData({
+            faceUrl: serverUrl + faceUrlData,
+            nickname: userInfo.nickname,
+            fansCounts: userInfo.fansCounts,
+            followCounts: userInfo.followCounts,
+            receiveLikeCounts: userInfo.receiveLikeCounts,
+          })
+        } else if (res.data.status == 500) {
+          // 失败弹出框
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            duration: 3000
+          })
+        }
+      }
+    })
+  },
   logout:function(){
 
     var serverUrl = app.serverUrl;
@@ -71,5 +110,6 @@ Page({
         })
       },
     })
-  }
+  },
+
 })
