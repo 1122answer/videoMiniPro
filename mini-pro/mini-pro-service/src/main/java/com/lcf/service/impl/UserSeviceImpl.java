@@ -1,7 +1,8 @@
-package com.lcf.service;
+package com.lcf.service.impl;
 
 import com.lcf.mapper.UsersMapper;
 import com.lcf.pojo.Users;
+import com.lcf.service.UserSevice;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
