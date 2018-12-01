@@ -1,19 +1,31 @@
 package com.lcf.controller;
 
+import com.lcf.enums.VideoStatusEnum;
+import com.lcf.pojo.Bgm;
 import com.lcf.pojo.Users;
+import com.lcf.pojo.Videos;
+import com.lcf.service.BgmService;
+import com.lcf.service.VideoService;
 import com.lcf.utils.IMoocJSONResult;
+import com.lcf.utils.MergeVideoMp3;
+import com.lcf.utils.FetchVideoCover;
+import com.lcf.utils.PagedResult;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.UUID;
+
+import static com.lcf.controller.BasicController.FFMPEG_EXE;
+import static com.lcf.controller.BasicController.FILE_SPACE;
+import static com.lcf.controller.BasicController.PAGE_SIZE;
 
 @RestController
 @RequestMapping("/video")
@@ -21,6 +33,10 @@ import java.io.InputStream;
 public class VideoController {
 
 
+    @Autowired
+    private BgmService bgmService;
+    @Autowired
+    private VideoService videoService;
     @ApiOperation(value = "用户上传视频" , notes = "用户上传视频接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id" ,required = true ,dataType = "String" ,paramType = "form"),
@@ -38,7 +54,8 @@ public class VideoController {
                                     int videoWidth,
                                     int videoHeight,
                                     String desc,
-                                        @ApiParam(value = "短视频",required=true) MultipartFile videoFile) throws  Exception{
+                                    @ApiParam(value = "短视频",required=true)
+                                    MultipartFile videoFile) throws  Exception{
         if(StringUtils.isBlank(userId)){
             return IMoocJSONResult.errorMsg("用户ID不能为空");
         }
@@ -46,17 +63,21 @@ public class VideoController {
         String fileSpace ="C:/lcf-videos";
         //保存到数据库中的相对路径
         String uploadPathDB = "/"+userId+"/video";
+        String coverPathDB = "/"+userId+"/video";
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
+        String finalVideoPath = "";
         try{
             if(videoFile !=null ){
                 String fileName= videoFile.getOriginalFilename();
+                String fileNamePrefix=fileName.split("\\.")[0];
                 if(StringUtils.isNotBlank(fileName)){
                     //文件上传最终保存路径
-                    String finalVideoPath = fileSpace + uploadPathDB +"/"+ fileName;
-
+                    finalVideoPath = fileSpace + uploadPathDB +"/"+ fileName;
+                   //finalVideoPath = FILE_SPACE + uploadPathDB + "/" + fileName;
                     //设置数据库保存路径
                     uploadPathDB+=("/"+fileName);
+                    coverPathDB+="/"+fileNamePrefix+".jpg";
                     File outFile = new File(finalVideoPath);
                     if(outFile.getParentFile() !=null || !outFile.getParentFile().isDirectory()){
                         outFile.getParentFile().mkdirs();
@@ -79,7 +100,55 @@ public class VideoController {
                 fileOutputStream.close();
             }
         }
+        // 判断bgmId是否为空，如果不为空，
+        // 那就查询bgm的信息，并且合并视频，生产新的视频
+        if (StringUtils.isNotBlank(bgmId)) {
+            Bgm bgm = bgmService.queryBgmById(bgmId);
+            String mp3InputPath = FILE_SPACE + bgm.getPath();
+
+            MergeVideoMp3 tool = new MergeVideoMp3(FFMPEG_EXE);
+            String videoInputPath = finalVideoPath;
+
+            String videoOutputName = UUID.randomUUID().toString() + ".mp4";
+            uploadPathDB = "/" + userId + "/video" + "/" + videoOutputName;
+            finalVideoPath = FILE_SPACE + uploadPathDB;
+            tool.convertor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
+        }
+        System.out.println("uploadPathDB=" + uploadPathDB);
+        System.out.println("finalVideoPath=" + finalVideoPath);
+        // 保存视频信息到数据库
+        Videos video = new Videos();
+        video.setAudioId(bgmId);
+        video.setUserId(userId);
+        video.setVideoSeconds((float)videoSeconds);
+        video.setVideoHeight(videoHeight);
+        video.setVideoWidth(videoWidth);
+        video.setVideoDesc(desc);
+        video.setVideoPath(uploadPathDB);
+        video.setCoverPath(coverPathDB);
+        video.setStatus(VideoStatusEnum.SUCCESS.value);
+        video.setCreateTime(new Date());
+
+         videoService.saveVideo(video);
 
         return IMoocJSONResult.ok();
     }
+
+    /**
+     *
+     * @Description: 分页和搜索查询视频列表
+     * isSaveRecord：1 - 需要保存
+     * 				 0 - 不需要保存 ，或者为空的时候
+     */
+    @PostMapping(value="/showAll")
+    public IMoocJSONResult showAll(
+                                   Integer page) throws Exception {
+
+        if(page==null){
+            page=1;
+        }
+        PagedResult result = videoService.getAllVideos( page, PAGE_SIZE);
+        return IMoocJSONResult.ok(result);
+    }
+
 }

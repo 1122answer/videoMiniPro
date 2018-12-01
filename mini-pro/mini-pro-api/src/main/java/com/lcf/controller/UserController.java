@@ -2,9 +2,8 @@ package com.lcf.controller;
 
 import com.lcf.pojo.Users;
 import com.lcf.pojo.vo.UsersVO;
-import com.lcf.service.UserSevice;
+import com.lcf.service.UserService;
 import com.lcf.utils.IMoocJSONResult;
-import com.lcf.utils.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.UUID;
 
 @RestController
 @Api(value = "用户相关业务接口" , tags = {"业务详情"})
@@ -27,7 +24,7 @@ import java.util.UUID;
 public class UserController extends BasicController{
 
 	@Autowired
-	private UserSevice userSevice;
+	private UserService userService;
 
 	@ApiOperation(value = "用户上传头像" , notes = "用户上传头像接口")
 	@ApiImplicitParam(name = "userId", value = "用户id" ,required = true ,dataType = "String" ,paramType = "query")
@@ -77,7 +74,7 @@ public class UserController extends BasicController{
 		Users user=new Users();
 		user.setId(userId);
 		user.setFaceImage(uploadPathDB);
-		userSevice.updateUserInfo(user);
+		userService.updateUserInfo(user);
 		return IMoocJSONResult.ok(uploadPathDB);
 	}
 	@ApiOperation(value = "查询用户信息" , notes = "查询用户信息接口")
@@ -87,7 +84,7 @@ public class UserController extends BasicController{
 		if(StringUtils.isBlank(userId)){
 			return IMoocJSONResult.errorMsg("用户ID不能为空");
 		}
-		Users userInfo=userSevice.queryUserInfo(userId);
+		Users userInfo= userService.queryUserInfo(userId);
 		UsersVO usersVO=new UsersVO();
 		BeanUtils.copyProperties(userInfo,usersVO);
 		return IMoocJSONResult.ok(usersVO);

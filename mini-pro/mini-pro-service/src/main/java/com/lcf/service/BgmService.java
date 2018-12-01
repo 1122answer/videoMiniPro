@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface BgmSevice {
+public interface BgmService {
     public List<Bgm> queryBgmList();
-
+    /**
+     * @Description: 根据id查询bgm信息
+     */
+    public Bgm queryBgmById(String bgmId);
 }

@@ -1,6 +1,6 @@
 package com.lcf.controller;
 
-import com.lcf.service.BgmSevice;
+import com.lcf.service.BgmService;
 import com.lcf.utils.IMoocJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "背景音乐接口" , tags = {"查询背景音乐"})
 public class BgmController {
     @Autowired
-    private BgmSevice bgmSevice;
+    private BgmService bgmService;
     @PostMapping("list")
     @ApiOperation(value = "查询背景音乐" , notes = "查询背景音乐")
     public IMoocJSONResult list() {
-        return IMoocJSONResult.ok(bgmSevice.queryBgmList());
+        return IMoocJSONResult.ok(bgmService.queryBgmList());
     }
 
 }

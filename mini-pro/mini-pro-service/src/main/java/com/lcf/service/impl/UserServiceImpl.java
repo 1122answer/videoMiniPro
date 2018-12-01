@@ -2,17 +2,16 @@ package com.lcf.service.impl;
 
 import com.lcf.mapper.UsersMapper;
 import com.lcf.pojo.Users;
-import com.lcf.service.UserSevice;
+import com.lcf.service.UserService;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
-public class UserSeviceImpl implements UserSevice {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UsersMapper userMapper;
     @Autowired

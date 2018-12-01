@@ -1,10 +1,9 @@
 package com.lcf.controller;
 
 import com.lcf.pojo.vo.UsersVO;
-import com.lcf.service.UserSevice;
+import com.lcf.service.UserService;
 import com.lcf.pojo.Users;
 import com.lcf.utils.MD5Utils;
-import io.netty.util.internal.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class RegistLoginController extends BasicController{
 
 	@Autowired
-	private UserSevice userSevice;
+	private UserService userService;
 
 	@ApiOperation(value = "用户注册" , notes = "用户注册接口")
 	@PostMapping("/regist")
@@ -31,7 +30,7 @@ public class RegistLoginController extends BasicController{
 			return IMoocJSONResult.errorMsg("用户名或密码不能为空！");
 		}
 		//判断用户名是否存在
-		if(userSevice.queryUsernameIsExist(user.getUsername())){
+		if(userService.queryUsernameIsExist(user.getUsername())){
 			return IMoocJSONResult.errorMsg("用户名已存在！");
 		}else {
 			user.setNickname(user.getUsername());
@@ -39,7 +38,7 @@ public class RegistLoginController extends BasicController{
 			user.setFansCounts(0);
 			user.setFollowCounts(0);
 			user.setReceiveLikeCounts(0);
-			userSevice.saveUser(user);
+			userService.saveUser(user);
 		}
 //		//保存用户名
 //		String uniquerToken = UUID.randomUUID().toString();
@@ -74,7 +73,7 @@ public class RegistLoginController extends BasicController{
 			return IMoocJSONResult.errorMsg("用户名或密码不能为空！");
 		}
 		//判断用户名是否存在
-		Users userResult = userSevice.queryUserForLogin(userName, MD5Utils.getMD5Str(password));
+		Users userResult = userService.queryUserForLogin(userName, MD5Utils.getMD5Str(password));
 
 		if(userResult !=null){
 			userResult.setPassword("");

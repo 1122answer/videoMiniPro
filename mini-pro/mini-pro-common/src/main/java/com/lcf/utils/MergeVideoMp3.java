@@ -1,6 +1,8 @@
 package com.lcf.utils;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +26,28 @@ public class MergeVideoMp3 {
         ProcessBuilder builder= new ProcessBuilder(command);
         Process process = builder.start();
         InputStream errorStream = process.getErrorStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(errorStream);
+        BufferedReader br = new BufferedReader(inputStreamReader);
 
+        String line = "";
+        while ( (line = br.readLine()) != null ) {
+        }
+
+        if (br != null) {
+            br.close();
+        }
+        if (inputStreamReader != null) {
+            inputStreamReader.close();
+        }
+        if (errorStream != null) {
+            errorStream.close();
+        }
        // process.start();
     }
     public static void main(String[] args){
         MergeVideoMp3 ffmpeg=new MergeVideoMp3("C:\\ffmpeg\\bin\\ffmpeg.exe");
         try {
-            ffmpeg.convertor("C:\\ffmpeg\\bin\\text.mp4","C:\\ffmpeg\\bin\\testmp3.mp3",6,"C:\\ffmpeg\\bin\\new11.avi");
+            ffmpeg.convertor("C:\\ffmpeg\\bin\\test.mp4","C:\\ffmpeg\\bin\\testmp3.mp3",10,"C:\\ffmpeg\\bin\\new11.avi");
         }catch (Exception e){
             e.printStackTrace();
         }
