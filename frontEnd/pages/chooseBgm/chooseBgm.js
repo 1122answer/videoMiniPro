@@ -35,7 +35,6 @@ Page({
           wx.hideLoading();
           if (res.data.status == 200) {
             var bgmList = res.data.data;
-            debugger
             me.setData({
               bgmList: bgmList,
               serverUrl: serverUrl
@@ -64,7 +63,6 @@ Page({
 
       console.log("bgmId:" + bgmId);
       console.log("desc:" + desc);
-      debugger
       var duration = me.data.videoParams.duration;
       var tmpHeight = me.data.videoParams.tmpHeight;
       var tmpWidth = me.data.videoParams.tmpWidth;
