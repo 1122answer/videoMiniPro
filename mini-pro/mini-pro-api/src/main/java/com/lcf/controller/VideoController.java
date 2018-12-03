@@ -60,7 +60,7 @@ public class VideoController {
             return IMoocJSONResult.errorMsg("用户ID不能为空");
         }
         //文件保存的命名空间
-        String fileSpace ="C:/lcf-videos";
+        //String fileSpace ="C:/lcf-videos";
         //保存到数据库中的相对路径
         String uploadPathDB = "/"+userId+"/video";
         String coverPathDB = "/"+userId+"/video";
@@ -70,10 +70,16 @@ public class VideoController {
         try{
             if(videoFile !=null ){
                 String fileName= videoFile.getOriginalFilename();
-                String fileNamePrefix=fileName.split("\\.")[0];
+                String arrayFilenameItem[] =  fileName.split("\\.");
+                String fileNamePrefix = "";
+                for (int i = 0 ; i < arrayFilenameItem.length-1 ; i ++) {
+                    fileNamePrefix += arrayFilenameItem[i];
+                }
+                // fix bug: 解决小程序端OK，PC端不OK的bug，原因：PC端和小程序端对临时视频的命名不同
+//				String fileNamePrefix = fileName.split("\\.")[0];
                 if(StringUtils.isNotBlank(fileName)){
                     //文件上传最终保存路径
-                    finalVideoPath = fileSpace + uploadPathDB +"/"+ fileName;
+                    finalVideoPath = FILE_SPACE + uploadPathDB +"/"+ fileName;
                    //finalVideoPath = FILE_SPACE + uploadPathDB + "/" + fileName;
                     //设置数据库保存路径
                     uploadPathDB+=("/"+fileName);
@@ -145,14 +151,22 @@ public class VideoController {
      * 				 0 - 不需要保存 ，或者为空的时候
      */
     @PostMapping(value="/showAll")
-    public IMoocJSONResult showAll(
-                                   Integer page) throws Exception {
+    public IMoocJSONResult showAll(@RequestBody Videos video,Integer page ,Integer isSaveRecord) throws Exception {
 
         if(page==null){
             page=1;
         }
-        PagedResult result = videoService.getAllVideos( page, PAGE_SIZE);
+        PagedResult result = videoService.getAllVideos(video, isSaveRecord ,page, PAGE_SIZE);
         return IMoocJSONResult.ok(result);
+    }
+    /**
+     *
+     * @Description: 热搜接口
+     *
+     */
+    @PostMapping(value="/hot")
+    public IMoocJSONResult hot() throws Exception {
+        return IMoocJSONResult.ok(videoService.getHotWords());
     }
 
 }

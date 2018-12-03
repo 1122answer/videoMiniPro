@@ -8,7 +8,8 @@ Page({
   },
   onLoad(){
     let self =this;
-    let user = app.userInfo;
+    //var user = app.userInfo;
+    let user = app.getGlobalUserInfo();
     let serverUrl = app.serverUrl;
     wx.showLoading({
       title: '请等待...',
@@ -47,8 +48,9 @@ Page({
   },
   logout:function(){
 
-    var serverUrl = app.serverUrl;
-    var user = app.userInfo;
+    let serverUrl = app.serverUrl;
+    //var user = app.userInfo;
+    let user = app.getGlobalUserInfo();
     wx.request({
       url: serverUrl + "/logOut?userId=" + user.id,
       method: "POST",
@@ -63,8 +65,9 @@ Page({
             icon: 'success',
             duration: 2000
           });
-          app.userInfo =null;
-
+          //app.userInfo =null;
+          //注销以后清空缓存
+          wx.removeStorageSync("userInfo");
           wx.redirectTo({
             url: '../userLogin/login',
           })
@@ -87,8 +90,10 @@ Page({
         wx.showLoading({
           title: '上传中',
         })
+        // fixme 修改原有的全局对象为本地缓存
+        var user = app.getGlobalUserInfo();
         wx.uploadFile({
-          url: serverUrl + '/user/uploadFace?userId=' + app.userInfo.id, //仅为示例，非真实的接口地址
+          url: serverUrl + '/user/uploadFace?userId=' + user.id, //仅为示例，非真实的接口地址
           filePath: tempFilePaths[0],
           name: 'file',
           success(res) {
@@ -122,9 +127,9 @@ Page({
         var tmpVideoUrl = res.tempFilePath;
         var tmpCoverUrl = res.thumbTempFilePath;
 
-        if (duration > 11) {
+        if (duration > 16) {
           wx.showToast({
-            title: '视频长度不能超过10秒...',
+            title: '视频长度不能超过15秒...',
             icon: "none",
             duration: 2500
           })

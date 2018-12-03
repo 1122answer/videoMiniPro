@@ -34,7 +34,13 @@ Page({
           wx.hideLoading()
           console.log(res.data)
           if (res.data.status==200){
-
+            wx.showToast({
+              title: '用户注册成功！',
+              duration: 2000
+            })
+            //app.userInfo = res.data.data;
+            // fixme 修改原有的全局对象为本地缓存
+            app.setGlobalUserInfo(res.data.data);
           }
         }
       })

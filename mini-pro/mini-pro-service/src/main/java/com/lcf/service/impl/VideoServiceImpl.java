@@ -3,9 +3,11 @@ package com.lcf.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcf.mapper.BgmMapper;
+import com.lcf.mapper.SearchRecordsMapper;
 import com.lcf.mapper.VideosMapper;
 import com.lcf.mapper.VideosMapperCustom;
 import com.lcf.pojo.Bgm;
+import com.lcf.pojo.SearchRecords;
 import com.lcf.pojo.Videos;
 import com.lcf.pojo.vo.VideosVo;
 import com.lcf.service.BgmService;
@@ -27,6 +29,8 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private VideosMapperCustom videosMapperCustom;
     @Autowired
+    private SearchRecordsMapper searchRecordsMapper;
+    @Autowired
     private Sid sid;
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -36,11 +40,21 @@ public class VideoServiceImpl implements VideoService {
         videosMapper.insertSelective(video);
 
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public PagedResult getAllVideos(Integer page, Integer pageSize) {
+    public PagedResult getAllVideos(Videos video,Integer isSaveRecord,Integer page, Integer pageSize) {
+        String desc = video.getVideoDesc();
+        //保存热搜词
+        if( isSaveRecord == 1){
+            SearchRecords record = new SearchRecords();
+            String recordId = sid.nextShort();
+            record.setId(recordId);
+            record.setContent(desc);
+            searchRecordsMapper.insert(record);
+        }
         PageHelper.startPage(page,pageSize);
-        List<VideosVo> list = videosMapperCustom.queryAllVideos();
+        List<VideosVo> list = videosMapperCustom.queryAllVideos(desc);
+
         PageInfo<VideosVo> pageList=new PageInfo<>(list);
         PagedResult pagedResult = new PagedResult();
         pagedResult.setPage(page);
@@ -48,6 +62,12 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setRows(list);
         pagedResult.setRecords(pageList.getTotal());
         return pagedResult;
+    }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getHotWords() {
+
+        return searchRecordsMapper.getHotWords();
     }
 
 }

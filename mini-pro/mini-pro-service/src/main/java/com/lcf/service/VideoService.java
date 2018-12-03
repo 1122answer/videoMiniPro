@@ -14,5 +14,7 @@ public interface VideoService {
      */
     public void saveVideo(Videos video);
 
-    public PagedResult getAllVideos(Integer page,Integer pageSize);
+    public PagedResult getAllVideos(Videos video,Integer isSaveRecord, Integer page,Integer pageSize);
+
+    public  List<String> getHotWords();
 }
