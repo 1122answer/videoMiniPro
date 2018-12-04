@@ -1,6 +1,7 @@
 package com.lcf.service;
 
 import com.lcf.pojo.Bgm;
+import com.lcf.pojo.Comments;
 import com.lcf.pojo.Videos;
 import com.lcf.utils.PagedResult;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,8 @@ public interface VideoService {
 
     public PagedResult getAllVideos(Videos video,Integer isSaveRecord, Integer page,Integer pageSize);
 
-    public  List<String> getHotWords();
+
+    public List<String> getHotwords();
+    public void saveComment(Comments comment);
+    public PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
 }

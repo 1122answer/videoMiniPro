@@ -2,6 +2,7 @@ package com.lcf.controller;
 
 import com.lcf.enums.VideoStatusEnum;
 import com.lcf.pojo.Bgm;
+import com.lcf.pojo.Comments;
 import com.lcf.pojo.Users;
 import com.lcf.pojo.Videos;
 import com.lcf.service.BgmService;
@@ -151,12 +152,16 @@ public class VideoController {
      * 				 0 - 不需要保存 ，或者为空的时候
      */
     @PostMapping(value="/showAll")
-    public IMoocJSONResult showAll(@RequestBody Videos video,Integer page ,Integer isSaveRecord) throws Exception {
+    public IMoocJSONResult showAll(@RequestBody Videos video,Integer page ,Integer isSaveRecord ,Integer pageSize) throws Exception {
 
         if(page==null){
             page=1;
         }
-        PagedResult result = videoService.getAllVideos(video, isSaveRecord ,page, PAGE_SIZE);
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedResult result = videoService.getAllVideos(video, isSaveRecord ,page, pageSize);
         return IMoocJSONResult.ok(result);
     }
     /**
@@ -166,7 +171,39 @@ public class VideoController {
      */
     @PostMapping(value="/hot")
     public IMoocJSONResult hot() throws Exception {
-        return IMoocJSONResult.ok(videoService.getHotWords());
+        return IMoocJSONResult.ok(videoService.getHotwords());
+    }
+    /**
+     *
+     * @Description: 保存留言
+     *
+     */
+    @PostMapping(value="/saveComment")
+    public IMoocJSONResult saveComment(@RequestBody Comments comment ,String fatherCommentId , String toUserId) throws Exception {
+        comment.setFatherCommentId(fatherCommentId);
+        comment.setFatherCommentId(toUserId);
+        videoService.saveComment(comment);
+        return IMoocJSONResult.ok();
     }
 
+    @PostMapping("/getVideoComments")
+    public IMoocJSONResult getVideoComments(String videoId, Integer page, Integer pageSize) throws Exception {
+
+        if (StringUtils.isBlank(videoId)) {
+            return IMoocJSONResult.ok();
+        }
+
+        // 分页查询视频列表，时间顺序倒序排序
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        PagedResult list = videoService.getAllComments(videoId, page, pageSize);
+
+        return IMoocJSONResult.ok(list);
+    }
 }

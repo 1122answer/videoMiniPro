@@ -23,7 +23,7 @@ Page({
   videoCtx: {},
 
   onLoad: function (params) {    
-    var me = this;
+     var me = this;
     me.videoCtx = wx.createVideoContext("myVideo", me);
 
     // 获取上一个页面传入的参数
@@ -66,12 +66,12 @@ Page({
       }
     })
 
-    me.getCommentsList(1);
+    me.getCommentsList(1); 
   },
 
   onShow: function () {
-    var me = this;
-    me.videoCtx.play();
+     var me = this;
+    me.videoCtx.play(); 
   },
 
   onHide: function () {
@@ -80,6 +80,7 @@ Page({
   },
 
   showSearch: function () {
+    
     wx.navigateTo({
       url: '../searchVideo/searchVideo',
     })
@@ -295,7 +296,7 @@ Page({
       wx.request({
         url: app.serverUrl + '/video/saveComment?fatherCommentId=' + fatherCommentId + "&toUserId=" + toUserId,
         method: 'POST',
-        header: {
+        header: {//用作拦截器拦截判断
           'content-type': 'application/json', // 默认值
           'headerUserId': user.id,
           'headerUserToken': user.userToken

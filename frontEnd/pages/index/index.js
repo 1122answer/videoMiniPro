@@ -16,18 +16,28 @@ Page({
       url: '../logs/logs'
     })
   },
-  onLoad() {
+  onLoad(params) {
     let me =this;
     let screenWidth = wx.getSystemInfoSync().screenWidth;
     me.setData({
       screenWidth:screenWidth
     })
+    var searchContent = params.search;
+    var isSaveRecord = params.isSaveRecord;
+    if (isSaveRecord == null || isSaveRecord == '' || isSaveRecord == undefined) {
+      isSaveRecord = 0;
+    }
+    me.setData({
+      searchContent: searchContent || ''
+    });
     let page =this.data.page;
     me.getAllVideoList(page);
   },
   getAllVideoList(page){
     let me = this;
     let serverUrl = app.serverUrl;
+    var searchContent = me.data.searchContent;
+
     wx.showLoading({
       title: '请等待，加载中......',
     })
@@ -35,6 +45,9 @@ Page({
     wx.request({
       url: serverUrl + "/video/showAll?page=" + page,
       method: "POST",
+      data: {
+        videoDesc: searchContent
+      },
       success(res) {
         wx.hideLoading();
         wx.hideNavigationBarLoading();
@@ -81,6 +94,17 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+
+  showVideoInfo: function (e) {
+    var me = this;
+    var videoList = me.data.videoList;
+    var arrindex = e.target.dataset.arrindex;
+    var videoInfo = JSON.stringify(videoList[arrindex]);
+
+    wx.redirectTo({
+      url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
     })
   }
 })
