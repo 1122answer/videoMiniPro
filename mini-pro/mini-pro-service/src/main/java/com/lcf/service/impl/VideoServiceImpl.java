@@ -82,6 +82,7 @@ public class VideoServiceImpl implements VideoService {
         comment.setId(id);
         comment.setCreateTime(new Date());
         commentsMapper.insert(comment);
+
     }
 
 

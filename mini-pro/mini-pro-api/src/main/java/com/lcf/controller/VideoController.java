@@ -181,7 +181,7 @@ public class VideoController {
     @PostMapping(value="/saveComment")
     public IMoocJSONResult saveComment(@RequestBody Comments comment ,String fatherCommentId , String toUserId) throws Exception {
         comment.setFatherCommentId(fatherCommentId);
-        comment.setFatherCommentId(toUserId);
+        comment.setToUserId(toUserId);
         videoService.saveComment(comment);
         return IMoocJSONResult.ok();
     }

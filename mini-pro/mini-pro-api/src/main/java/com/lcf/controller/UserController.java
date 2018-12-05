@@ -1,6 +1,7 @@
 package com.lcf.controller;
 
 import com.lcf.pojo.Users;
+import com.lcf.pojo.vo.PublisherVideo;
 import com.lcf.pojo.vo.UsersVO;
 import com.lcf.service.UserService;
 import com.lcf.utils.IMoocJSONResult;
@@ -88,5 +89,28 @@ public class UserController extends BasicController{
 		UsersVO usersVO=new UsersVO();
 		BeanUtils.copyProperties(userInfo,usersVO);
 		return IMoocJSONResult.ok(usersVO);
+	}
+
+	@PostMapping("/queryPublisher")
+	public IMoocJSONResult queryPublisher(String loginUserId, String videoId,
+										  String publishUserId) throws Exception {
+
+		if (StringUtils.isBlank(publishUserId)) {
+			return IMoocJSONResult.errorMsg("");
+		}
+
+		// 1. 查询视频发布者的信息
+		Users userInfo = userService.queryUserInfo(publishUserId);
+		UsersVO publisher = new UsersVO();
+		BeanUtils.copyProperties(userInfo, publisher);
+
+		// 2. 查询当前登录者和视频的点赞关系
+		boolean userLikeVideo = userService.isUserLikeVideo(loginUserId, videoId);
+
+		PublisherVideo bean = new PublisherVideo();
+		bean.setPublisher(publisher);
+		bean.setUserLikeVideo(userLikeVideo);
+
+		return IMoocJSONResult.ok(bean);
 	}
 }

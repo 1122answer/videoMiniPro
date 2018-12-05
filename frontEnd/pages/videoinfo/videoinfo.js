@@ -22,7 +22,8 @@ Page({
 
   videoCtx: {},
 
-  onLoad: function (params) {    
+  onLoad: function (params) {   
+    debugger 
      var me = this;
     me.videoCtx = wx.createVideoContext("myVideo", me);
 
@@ -54,7 +55,6 @@ Page({
       method: 'POST',
       success: function(res) {
         console.log(res.data);
-
         var publisher = res.data.data.publisher;
         var userLikeVideo = res.data.data.userLikeVideo;
 
@@ -280,7 +280,7 @@ Page({
     // 获取评论回复的fatherCommentId和toUserId
     var fatherCommentId = e.currentTarget.dataset.replyfathercommentid;
     var toUserId = e.currentTarget.dataset.replytouserid;
-
+    
     var user = app.getGlobalUserInfo();
     var videoInfo = JSON.stringify(me.data.videoInfo);
     var realUrl = '../videoinfo/videoinfo#videoInfo@' + videoInfo;
