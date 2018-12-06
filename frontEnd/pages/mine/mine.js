@@ -5,21 +5,61 @@ const app = getApp()
 Page({
   data: {
     faceUrl: "../resource/images/noneface.png",
+    isMe: true,
+    isFollow: false,
+
+
+    videoSelClass: "video-info",
+    isSelectedWork: "video-info-selected",
+    isSelectedLike: "",
+    isSelectedFollow: "",
+
+    myVideoList: [],
+    myVideoPage: 1,
+    myVideoTotal: 1,
+
+    likeVideoList: [],
+    likeVideoPage: 1,
+    likeVideoTotal: 1,
+
+    followVideoList: [],
+    followVideoPage: 1,
+    followVideoTotal: 1,
+
+    myWorkFalg: false,
+    myLikesFalg: true,
+    myFollowFalg: true
   },
-  onLoad(){
-    let self =this;
+  onLoad(params){
+    let me =this;
     //var user = app.userInfo;
     let user = app.getGlobalUserInfo();
-    let serverUrl = app.serverUrl;
+    var userId = user.id;
+    var serverUrl = app.serverUrl;
+
+    var publisherId = params.publisherId;
+    if (publisherId != null && publisherId != '' && publisherId != undefined) {
+      userId = publisherId;
+      me.setData({
+        isMe: false,
+        publisherId: publisherId,
+        serverUrl: app.serverUrl
+      })
+    }
+    me.setData({
+      userId: userId
+    })
     wx.showLoading({
       title: '请等待...',
     });
     // 调用后端
     wx.request({
-      url: serverUrl + '/user/query?userId=' + user.id,
+      url: serverUrl + '/user/query?userId=' + userId + "&fanId=" + user.id,
       method: "POST",
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'headerUserId': user.id,
+        'headerUserToken': user.userToken
       },
       success(res) {
         console.log(res.data);
@@ -27,9 +67,9 @@ Page({
         if (res.data.status == 200) {
           
            let  userInfo = res.data.data;
-          let faceUrlData = userInfo.faceImage&&userInfo.faceImage || self.data.faceUrl
-          self.setData({
-            faceUrl: serverUrl + faceUrlData,
+          let faceUrlData = userInfo.faceImage && (serverUrl + userInfo.faceImage ) || me.data.faceUrl
+          me.setData({
+            faceUrl:  faceUrlData,
             nickname: userInfo.nickname,
             fansCounts: userInfo.fansCounts,
             followCounts: userInfo.followCounts,
@@ -86,15 +126,20 @@ Page({
       success: function(res) {
         var tempFilePaths=res.tempFilePaths;
         var serverUrl=app.serverUrl
-        console.log(res,app.userInfo.id)
+       // console.log(res,app.userInfo.id)
         wx.showLoading({
           title: '上传中',
         })
         // fixme 修改原有的全局对象为本地缓存
-        var user = app.getGlobalUserInfo();
+        var userInfo = app.getGlobalUserInfo();
         wx.uploadFile({
-          url: serverUrl + '/user/uploadFace?userId=' + user.id, //仅为示例，非真实的接口地址
+          url: serverUrl + '/user/uploadFace?userId=' + userInfo.id, //仅为示例，非真实的接口地址
           filePath: tempFilePaths[0],
+          header: {
+            'content-type': 'application/json', // 默认值
+            'headerUserId': userInfo.id,
+            'headerUserToken': userInfo.userToken
+          },
           name: 'file',
           success(res) {
             wx.hideLoading()

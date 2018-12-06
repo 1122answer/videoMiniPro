@@ -23,7 +23,6 @@ Page({
   videoCtx: {},
 
   onLoad: function (params) {   
-    debugger 
      var me = this;
     me.videoCtx = wx.createVideoContext("myVideo", me);
 

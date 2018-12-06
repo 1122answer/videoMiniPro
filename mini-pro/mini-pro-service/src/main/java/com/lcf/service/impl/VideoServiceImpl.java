@@ -3,10 +3,7 @@ package com.lcf.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcf.mapper.*;
-import com.lcf.pojo.Bgm;
-import com.lcf.pojo.Comments;
-import com.lcf.pojo.SearchRecords;
-import com.lcf.pojo.Videos;
+import com.lcf.pojo.*;
 import com.lcf.pojo.vo.CommentsVO;
 import com.lcf.pojo.vo.VideosVo;
 import com.lcf.service.BgmService;
@@ -19,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -35,6 +33,8 @@ public class VideoServiceImpl implements VideoService {
     private CommentsMapper commentsMapper;
     @Autowired
     private CommentsMapperCustom commentMapperCustom;
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
     @Autowired
     private Sid sid;
     @Transactional(propagation = Propagation.REQUIRED)
@@ -107,6 +107,28 @@ public class VideoServiceImpl implements VideoService {
         grid.setRecords(pageList.getTotal());
 
         return grid;
+    }
+
+    @Override
+    public void saveLike(String userId, String videoId) {
+        UsersLikeVideos usersLikeVideos = new UsersLikeVideos();
+        String id = sid.nextShort();
+        usersLikeVideos.setId(id);
+        usersLikeVideos.setUserId(userId);
+        usersLikeVideos.setVideoId(videoId);
+        usersLikeVideosMapper.insert(usersLikeVideos);
+        videosMapperCustom.addVideoLikeCount(videoId);
+    }
+
+    @Override
+    public void deleteLike(String userId, String videoId) {
+        Example likeExample = new Example(UsersLikeVideos.class);
+        Example.Criteria criteria = likeExample.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("videoId", videoId);
+
+        usersLikeVideosMapper.deleteByExample(likeExample);
+        videosMapperCustom.reduceVideoLikeCount(videoId);
     }
 
 }

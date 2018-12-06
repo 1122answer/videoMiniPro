@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7f7402f-d105-480a-aecd-2753a4227dff" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/mini-pro/mini-pro-pojo/src/main/java/com/lcf/pojo/vo/PublisherVideo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontEnd/pages/videoinfo/videoinfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontEnd/pages/videoinfo/videoinfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/VideoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-mapper/src/main/java/com/lcf/mapper/SearchRecordsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-mapper/src/main/java/com/lcf/mapper/SearchRecordsMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/impl/VideoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/impl/VideoServiceImpl.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,10 +14,11 @@
     <session id="615676384">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -69,7 +61,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/RegistLoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
+            <state relative-caret-position="-25">
               <caret line="21" selection-start-line="21" selection-end-line="22" />
             </state>
           </provider>
@@ -127,9 +119,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -138,10 +130,10 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/mini-pro" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -167,16 +159,17 @@
       <updated>1543999793736</updated>
       <workItem from="1543999798753" duration="290000" />
       <workItem from="1544000111477" duration="615000" />
+      <workItem from="1544055021633" duration="978000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="905000" />
+    <option name="totallyTimeSpent" value="1883000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10074627" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -201,7 +194,7 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="6" visible="true" weight="0.32995737" />
+      <window_info anchor="right" id="Maven Projects" order="6" visible="true" weight="0.18710022" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Database" order="8" />
     </layout>
@@ -211,6 +204,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/mini-pro/mini-pro-service/src/main/java/com/lcf/service/impl/VideoServiceImpl.java">
@@ -249,7 +246,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mini-pro/mini-pro-api/src/main/java/com/lcf/controller/RegistLoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
+        <state relative-caret-position="-25">
           <caret line="21" selection-start-line="21" selection-end-line="22" />
         </state>
       </provider>

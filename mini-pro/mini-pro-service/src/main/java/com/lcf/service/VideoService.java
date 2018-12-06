@@ -21,4 +21,9 @@ public interface VideoService {
     public List<String> getHotwords();
     public void saveComment(Comments comment);
     public PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
+    //点赞视频
+    public void saveLike(String userId , String videoId);
+    //取消点赞
+    public void deleteLike(String userId , String videoId);
+
 }

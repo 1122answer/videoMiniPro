@@ -27,8 +27,8 @@ Page({
         method: "POST",
         header: {
           'content-type': 'application/json', // 默认值
-          /* 'headerUserId': user.id,
-          'headerUserToken': user.userToken */
+          'headerUserId': user.id,
+          'headerUserToken': user.userToken 
         },
         success: function (res) {
           console.log(res.data);
@@ -91,8 +91,8 @@ Page({
         name: 'videoFile',
         header: {
           'content-type': 'application/json', // 默认值
-          //'headerUserId': userInfo.id,
-          //'headerUserToken': userInfo.userToken
+          'headerUserId': userInfo.id,
+          'headerUserToken': userInfo.userToken
         },
         success: function (res) {
           var data = JSON.parse(res.data);

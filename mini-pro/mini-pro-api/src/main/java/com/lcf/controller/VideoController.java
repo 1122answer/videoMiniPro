@@ -206,4 +206,37 @@ public class VideoController {
 
         return IMoocJSONResult.ok(list);
     }
+
+    /**
+     *
+     * @Description: 点赞视频
+     *
+     */
+    @PostMapping(value="/userLike" )
+    public IMoocJSONResult userLike(String userId , String videoId) throws Exception {
+        if(userId != null && userId !=""&& videoId !=null && videoId!= ""){
+            videoService.saveLike(userId,videoId);
+        }else {
+            return  IMoocJSONResult.errorMsg("错误");
+        }
+
+        return IMoocJSONResult.ok();
+    }
+    /**
+     *
+     * @Description:    取消点赞视频
+     *
+     */
+    @PostMapping(value="/userUnLike" )
+    public IMoocJSONResult userUnLike(String userId , String videoId) throws Exception {
+        if(userId != null && userId !=""&& videoId !=null && videoId!= ""){
+            videoService.deleteLike(userId,videoId);
+        }else {
+            return  IMoocJSONResult.errorMsg("错误");
+        }
+
+        return IMoocJSONResult.ok();
+    }
+
+
 }
